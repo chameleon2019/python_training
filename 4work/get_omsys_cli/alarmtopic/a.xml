@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doc>
+  <content>
+    <foms>
+      <fom product_name="PTN7900">
+        <fom_id><![CDATA[0x09060009]]></fom_id>
+        <alarm_mnemonic><![CDATA[hwMplsOamLoss]]></alarm_mnemonic>
+        <alarm_name_en><![CDATA[MPLS_TUNNEL_LOCV]]></alarm_name_en>
+        <alarm_name_cn><![CDATA[Tunnel连通性丢失]]></alarm_name_cn>
+        <alarm_name_detail_en><![CDATA[MPLS_TUNNEL_LOCV]]></alarm_name_detail_en>
+        <alarm_cleared_name_en></alarm_cleared_name_en>
+        <alarm_cleared_name_cn></alarm_cleared_name_cn>
+        <alarm_class>1</alarm_class>
+        <alarm_id><![CDATA[0x0000320E]]></alarm_id>
+        <cleared_alarm_id></cleared_alarm_id>
+        <trap_enable></trap_enable>
+        <report_default>TRUE</report_default>
+        <monitor_default>TRUE</monitor_default>
+        <service_refer>TRUE</service_refer>
+        <trap_descr_en><![CDATA[Packets were continuously lost in an MPLS tunnel.]]></trap_descr_en>
+        <trap_descr_cn><![CDATA[Tunnel业务承载的流量产生连续性丢包，则产生该告警。]]></trap_descr_cn>
+        <alarm_level>2</alarm_level>
+        <default_suppress_time><![CDATA[2]]></default_suppress_time>
+        <cleared_suppress_time><![CDATA[10]]></cleared_suppress_time>
+        <alarm_para_info>
+          <pa_name>SessionTunnelId</pa_name>
+          <pa_name>LocalLspId</pa_name>
+          <pa_name>IngressLsrId</pa_name>
+          <pa_name>EgressLsrId</pa_name>
+          <pa_name>IfIndex</pa_name>
+          <pa_name>TunnelName</pa_name>
+          <pa_name>IfName</pa_name>
+          <pa_name>SgnlPrtcl</pa_name>
+          <pa_name>MegId</pa_name>
+          <pa_name>LsrRole</pa_name>
+        </alarm_para_info>
+        <info_output_to_cli_en><![CDATA[The tunnel receives a consecutive packet loss alarm.(SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], IfIndex=[IfIndex], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], IfName=[IfName], SectionMegId=[MegId], LsrRole=[LsrRole])]]></info_output_to_cli_en>
+        <info_output_to_cli_en_parameter><![CDATA[]]></info_output_to_cli_en_parameter>
+        <info_output_to_cli_cn><![CDATA[隧道收到连续性丢包告警发生。(SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], IfIndex=[IfIndex], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], IfName=[IfName], SectionMegId=[MegId], LsrRole=[LsrRole])]]></info_output_to_cli_cn>
+        <info_output_to_cli_cn_parameter><![CDATA[]]></info_output_to_cli_cn_parameter>
+        <almclr_output_to_cli_en><![CDATA[The consecutive packet loss alarm received by the tunnel is cleared.(SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], LsrRole=[LsrRole])]]></almclr_output_to_cli_en>
+        <almclr_output_to_cli_en_parameter><![CDATA[]]></almclr_output_to_cli_en_parameter>
+        <almclr_output_to_cli_cn><![CDATA[隧道收到连续性丢包告警恢复。(SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], LsrRole=[LsrRole])]]></almclr_output_to_cli_cn>
+        <almclr_output_to_cli_cn_parameter><![CDATA[]]></almclr_output_to_cli_cn_parameter>
+        <qry_cli_alm_desc_en></qry_cli_alm_desc_en>
+        <qry_cli_alm_desc_cn></qry_cli_alm_desc_cn>
+        <qry_cli_almclr_desc_en></qry_cli_almclr_desc_en>
+        <qry_cli_almclr_desc_cn></qry_cli_almclr_desc_cn>
+        <carrier_objects>
+          <carrier_obj>
+            <carrier_objname><![CDATA[linkDown]]></carrier_objname>
+            <carrier_objid><![CDATA[3624065]]></carrier_objid>
+            <carrier_objtype><![CDATA[22]]></carrier_objtype>
+            <carrier_fim_id>0x08520003</carrier_fim_id>
+            <carrier_objpara>IfIndex</carrier_objpara>
+            <carrier_objtype_name><![CDATA[interface]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[mplsTunnelDown]]></carrier_objname>
+            <carrier_objid><![CDATA[3624272]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060004</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_UNKNOWN]]></carrier_objname>
+            <carrier_objid><![CDATA[3624086]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062053</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_MISMERGE]]></carrier_objname>
+            <carrier_objid><![CDATA[3624019]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062051</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_MISMATCH]]></carrier_objname>
+            <carrier_objid><![CDATA[3624200]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062050</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamPeriod]]></carrier_objname>
+            <carrier_objid><![CDATA[3624245]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060015</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamAis]]></carrier_objname>
+            <carrier_objid><![CDATA[3623986]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906000b</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamLck]]></carrier_objname>
+            <carrier_objid><![CDATA[3624158]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060017</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamMeg]]></carrier_objname>
+            <carrier_objid><![CDATA[3624236]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906000f</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamMep]]></carrier_objname>
+            <carrier_objid><![CDATA[3624074]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060011</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_FDI]]></carrier_objname>
+            <carrier_objid><![CDATA[3623950]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906204f</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsTpOamSectionLocalLock]]></carrier_objname>
+            <carrier_objid><![CDATA[3624260]]></carrier_objid>
+            <carrier_objtype><![CDATA[83]]></carrier_objtype>
+            <carrier_fim_id>0x09c9200d</carrier_fim_id>
+            <carrier_objpara>MegId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsTpOamSectionLossOfConnection]]></carrier_objname>
+            <carrier_objid><![CDATA[3624072]]></carrier_objid>
+            <carrier_objtype><![CDATA[83]]></carrier_objtype>
+            <carrier_fim_id>0x09c90000</carrier_fim_id>
+            <carrier_objpara>MegId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+          </carrier_obj>
+        </carrier_objects>
+        <alarm_start_oid></alarm_start_oid>
+        <alarm_start_trap_name></alarm_start_trap_name>
+        <alarm_cleared_oid></alarm_cleared_oid>
+        <alarm_clear_trap_name></alarm_clear_trap_name>
+        <to_trap_para_sequence></to_trap_para_sequence>
+        <almclr_to_trap_para_sequence></almclr_to_trap_para_sequence>
+        <itut_para_sequence><![CDATA[$[SessionTunnelId]$[LocalLspId]$[IngressLsrId]$[EgressLsrId]$[IfIndex]$[TunnelName]$[IfName]$[SgnlPrtcl]$[MegId]$[LsrRole]]]></itut_para_sequence>
+        <memo><![CDATA[]]></memo>
+        <products>PTN7900</products>
+      </fom>
+      <fom product_name="PTN90X,PTN9X0">
+        <fom_id><![CDATA[0x09060009]]></fom_id>
+        <alarm_mnemonic><![CDATA[hwMplsOamLoss]]></alarm_mnemonic>
+        <alarm_name_en><![CDATA[MPLS_TUNNEL_LOCV]]></alarm_name_en>
+        <alarm_name_cn><![CDATA[Tunnel连通性丢失]]></alarm_name_cn>
+        <alarm_name_detail_en><![CDATA[MPLS_TUNNEL_LOCV]]></alarm_name_detail_en>
+        <alarm_cleared_name_en></alarm_cleared_name_en>
+        <alarm_cleared_name_cn></alarm_cleared_name_cn>
+        <alarm_class>1</alarm_class>
+        <alarm_id><![CDATA[0x0000320E]]></alarm_id>
+        <cleared_alarm_id></cleared_alarm_id>
+        <trap_enable></trap_enable>
+        <report_default>TRUE</report_default>
+        <monitor_default>TRUE</monitor_default>
+        <service_refer>TRUE</service_refer>
+        <trap_descr_en><![CDATA[Packets were continuously lost in an MPLS tunnel.]]></trap_descr_en>
+        <trap_descr_cn><![CDATA[Tunnel业务承载的流量产生连续性丢包，则产生该告警。]]></trap_descr_cn>
+        <alarm_level>2</alarm_level>
+        <default_suppress_time><![CDATA[2]]></default_suppress_time>
+        <cleared_suppress_time><![CDATA[10]]></cleared_suppress_time>
+        <alarm_para_info>
+          <pa_name>SessionTunnelId</pa_name>
+          <pa_name>LocalLspId</pa_name>
+          <pa_name>IngressLsrId</pa_name>
+          <pa_name>EgressLsrId</pa_name>
+          <pa_name>IfIndex</pa_name>
+          <pa_name>TunnelName</pa_name>
+          <pa_name>IfName</pa_name>
+          <pa_name>SgnlPrtcl</pa_name>
+          <pa_name>MegId</pa_name>
+          <pa_name>LsrRole</pa_name>
+        </alarm_para_info>
+        <info_output_to_cli_en><![CDATA[The tunnel receives a consecutive packet loss alarm.]]></info_output_to_cli_en>
+        <info_output_to_cli_en_parameter><![CDATA[SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], IfIndex=[IfIndex], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], IfName=[IfName], SectionMegId=[MegId], LsrRole=[LsrRole]]]></info_output_to_cli_en_parameter>
+        <info_output_to_cli_cn><![CDATA[隧道收到连续性丢包告警发生。]]></info_output_to_cli_cn>
+        <info_output_to_cli_cn_parameter><![CDATA[SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], IfIndex=[IfIndex], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], IfName=[IfName], SectionMegId=[MegId], LsrRole=[LsrRole]]]></info_output_to_cli_cn_parameter>
+        <almclr_output_to_cli_en><![CDATA[The consecutive packet loss alarm received by the tunnel is cleared.]]></almclr_output_to_cli_en>
+        <almclr_output_to_cli_en_parameter><![CDATA[SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], LsrRole=[LsrRole]]]></almclr_output_to_cli_en_parameter>
+        <almclr_output_to_cli_cn><![CDATA[隧道收到连续性丢包告警恢复。]]></almclr_output_to_cli_cn>
+        <almclr_output_to_cli_cn_parameter><![CDATA[SessionTunnelId=[SessionTunnelId], LocalLspId=[LocalLspId], IngressLsrId=[IngressLsrId], EgressLsrId=[EgressLsrId], TunnelName=[TunnelName], SignalingProtocol=[SgnlPrtcl], LsrRole=[LsrRole]]]></almclr_output_to_cli_cn_parameter>
+        <qry_cli_alm_desc_en></qry_cli_alm_desc_en>
+        <qry_cli_alm_desc_cn></qry_cli_alm_desc_cn>
+        <qry_cli_almclr_desc_en></qry_cli_almclr_desc_en>
+        <qry_cli_almclr_desc_cn></qry_cli_almclr_desc_cn>
+        <carrier_objects>
+          <carrier_obj>
+            <carrier_objname><![CDATA[linkDown]]></carrier_objname>
+            <carrier_objid><![CDATA[3624065]]></carrier_objid>
+            <carrier_objtype><![CDATA[22]]></carrier_objtype>
+            <carrier_fim_id>0x08520003</carrier_fim_id>
+            <carrier_objpara>IfIndex</carrier_objpara>
+            <carrier_objtype_name><![CDATA[interface]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[mplsTunnelDown]]></carrier_objname>
+            <carrier_objid><![CDATA[3624272]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060004</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_UNKNOWN]]></carrier_objname>
+            <carrier_objid><![CDATA[3624086]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062053</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_MISMERGE]]></carrier_objname>
+            <carrier_objid><![CDATA[3624019]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062051</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_MISMATCH]]></carrier_objname>
+            <carrier_objid><![CDATA[3624200]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09062050</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamPeriod]]></carrier_objname>
+            <carrier_objid><![CDATA[3624245]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060015</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamAis]]></carrier_objname>
+            <carrier_objid><![CDATA[3623986]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906000b</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamLck]]></carrier_objname>
+            <carrier_objid><![CDATA[3624158]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060017</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamMeg]]></carrier_objname>
+            <carrier_objid><![CDATA[3624236]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906000f</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsOamMep]]></carrier_objname>
+            <carrier_objid><![CDATA[3624074]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x09060011</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[MPLS_TUNNEL_FDI]]></carrier_objname>
+            <carrier_objid><![CDATA[3623950]]></carrier_objid>
+            <carrier_objtype><![CDATA[12]]></carrier_objtype>
+            <carrier_fim_id>0x0906204f</carrier_fim_id>
+            <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsTpOamSectionLocalLock]]></carrier_objname>
+            <carrier_objid><![CDATA[3624260]]></carrier_objid>
+            <carrier_objtype><![CDATA[83]]></carrier_objtype>
+            <carrier_fim_id>0x09c9200d</carrier_fim_id>
+            <carrier_objpara>MegId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+          </carrier_obj>
+          <carrier_obj>
+            <carrier_objname><![CDATA[hwMplsTpOamSectionLossOfConnection]]></carrier_objname>
+            <carrier_objid><![CDATA[3624072]]></carrier_objid>
+            <carrier_objtype><![CDATA[83]]></carrier_objtype>
+            <carrier_fim_id>0x09c90000</carrier_fim_id>
+            <carrier_objpara>MegId</carrier_objpara>
+            <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+          </carrier_obj>
+        </carrier_objects>
+        <alarm_start_oid></alarm_start_oid>
+        <alarm_start_trap_name></alarm_start_trap_name>
+        <alarm_cleared_oid></alarm_cleared_oid>
+        <alarm_clear_trap_name></alarm_clear_trap_name>
+        <to_trap_para_sequence></to_trap_para_sequence>
+        <almclr_to_trap_para_sequence></almclr_to_trap_para_sequence>
+        <itut_para_sequence><![CDATA[$[SessionTunnelId]$[LocalLspId]$[IngressLsrId]$[EgressLsrId]$[IfIndex]$[TunnelName]$[IfName]$[SgnlPrtcl]$[MegId]$[LsrRole]]]></itut_para_sequence>
+        <memo><![CDATA[]]></memo>
+        <products>PTN90X,PTN9X0</products>
+      </fom>
+    </foms>
+    <fim>
+      <fim_id><![CDATA[0x09060009]]></fim_id>
+      <alarm_mnemonic><![CDATA[hwMplsOamLoss]]></alarm_mnemonic>
+      <event_type>1</event_type>
+      <cleared_type>ADAC</cleared_type>
+      <alarm_objecttype>12</alarm_objecttype>
+      <reportCycle></reportCycle>
+      <alarm_para_info>
+        <para_info>
+          <pa_index>1</pa_index>
+          <pa_name><![CDATA[FeNode]]></pa_name>
+          <pa_type>UINT32</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[位置源标识。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[FeNode.]]></pa_info_data_en>
+          <pa_index_num>1</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>2</pa_index>
+          <pa_name><![CDATA[SessionTunnelId]]></pa_name>
+          <pa_type>UINT32</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>Y</pa_isid>
+          <pa_info_data><![CDATA[隧道标识。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Tunnel Id.]]></pa_info_data_en>
+          <pa_index_num>2</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>3</pa_index>
+          <pa_name><![CDATA[LocalLspId]]></pa_name>
+          <pa_type>UINT32</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>Y</pa_isid>
+          <pa_info_data><![CDATA[隧道lsp标识。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Local Lsp Id.]]></pa_info_data_en>
+          <pa_index_num>3</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>4</pa_index>
+          <pa_name><![CDATA[IngressLsrId]]></pa_name>
+          <pa_type>IPV4_DT</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>Y</pa_isid>
+          <pa_info_data><![CDATA[隧道的头节点地址。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Ingress Lsr Id.]]></pa_info_data_en>
+          <pa_index_num>4</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>5</pa_index>
+          <pa_name><![CDATA[EgressLsrId]]></pa_name>
+          <pa_type>IPV4_DT</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>Y</pa_isid>
+          <pa_info_data><![CDATA[隧道的目的地址。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Egress Lsr Id.]]></pa_info_data_en>
+          <pa_index_num>5</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>6</pa_index>
+          <pa_name><![CDATA[IfIndex]]></pa_name>
+          <pa_type>UINT32</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[接口索引。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Interface Index.]]></pa_info_data_en>
+          <pa_index_num>6</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>7</pa_index>
+          <pa_name><![CDATA[TunnelName]]></pa_name>
+          <pa_type>STRING</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[Tunnel的接口名称。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Tunnel Interface Name.]]></pa_info_data_en>
+          <pa_index_num>7</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>8</pa_index>
+          <pa_name><![CDATA[IfName]]></pa_name>
+          <pa_type>IFID2IFNAME</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_object_ref><![CDATA[huawei-ifm:/ifm/interfaces/interface/ifName]]></pa_object_ref>
+          <pa_info_data><![CDATA[接口名称。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Interface Name.]]></pa_info_data_en>
+          <pa_index_num>8</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>9</pa_index>
+          <pa_name><![CDATA[SgnlPrtcl]]></pa_name>
+          <pa_type>SIGNALPROT</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[隧道协议标识，取值范围是：
+- 1：RSVP类型
+- 2：STATIC类型
+- 3：CRSTATIC类型
+PTN7900,PTN9X0:
+- 1：RSVP类型
+- 2：STATIC类型
+- 3：CRSTATIC类型
+- 4：SEGMENT_ROUTING类型]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Signaling protocol used by a tunnel session including:
+- 1: RSVP
+- 2: STATIC
+- 3: CRSTATIC
+PTN7900,PTN9X0:
+- 1: RSVP
+- 2: STATIC
+- 3: CRSTATIC
+- 4: SEGMENT_ROUTING]]></pa_info_data_en>
+          <pa_index_num>9</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>10</pa_index>
+          <pa_name><![CDATA[MegId]]></pa_name>
+          <pa_type>STRING</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[Section维护实体组的名字。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Section MEG Name.]]></pa_info_data_en>
+          <pa_index_num>10</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>11</pa_index>
+          <pa_name><![CDATA[LsrRole]]></pa_name>
+          <pa_type>LSPLSRROLE</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[隧道lsp角色。]]></pa_info_data>
+          <pa_info_data_en><![CDATA[Lsp Lsr Role.]]></pa_info_data_en>
+          <pa_index_num>11</pa_index_num>
+        </para_info>
+        <para_info>
+          <pa_index>12</pa_index>
+          <pa_name><![CDATA[SignalledTunnelName]]></pa_name>
+          <pa_type>STRING</pa_type>
+          <pa_isbase>Y</pa_isbase>
+          <pa_isid>N</pa_isid>
+          <pa_info_data><![CDATA[隧道别名]]></pa_info_data>
+          <pa_info_data_en><![CDATA[User-Defined Tunnel Name]]></pa_info_data_en>
+          <pa_index_num>12</pa_index_num>
+        </para_info>
+      </alarm_para_info>
+      <prob_causes_en>
+        <prob_cause_en>
+          <pc_en_xh>0</pc_en_xh>
+          <pc_en_cause><![CDATA[Cause1: The local end is enabled to receive CC messages, but the peer end is not enabled to send CC messages.
+Cause2: An interface connected to the MPLS tunnel is shut down so that no CC message can be transmitted.
+Cause3: The MPLS tunnel is congested so that no CC message can be transmitted.
+Cause4: The MPLS tunnel is deteriorated so that no CC message can be transmitted.]]></pc_en_cause>
+          <pc_en_advise><![CDATA[1. Run the display mpls-tp oam meg <meg-name> command to check whether the CC function is correctly configured on the ingress and egress MEGs.
+  - If so, go to Step 3.
+  - If not, go to Step 2.
+2. Reconfigure the CC function on the ingress and egress MEGs.
+  - Then check whether MPLS_LSPM_1.3.6.1.4.1.2011.5.25.121.2.1.19 hwMplsOamLossRecovery is reported.
+    - If so, go to Step 7.
+    - If not, go to Step 3.
+3. Run the display interface command to check whether any physical interface connected to the MPLS tunnel is shut down.
+  - If so, go to Step 4.
+  - If not, go to Step 5.
+4. Run the undo shutdown command to enable the physical interface. Then check whether the alarm is cleared.
+  - If so, go to Step 7.
+  - If not, go to Step 5.
+5. If all configurations are correct, the MPLS tunnel is deteriorated. Then go to Step 6.
+6. Collect alarm information and configuration information, and then contact technical support personnel.
+7. End.]]></pc_en_advise>
+          <pc_en_may_cause><![CDATA[The MPLS tunnel generating this alarm fails to forward traffic, interrupting services.]]></pc_en_may_cause>
+          <pc_en_tigger><![CDATA[The physical link fails.]]></pc_en_tigger>
+          <pc_en_network><![CDATA[1. Check whether the physical link is working properly and replace faulty components such as optical fibers, boards, or optical modules.
+2. Check the bandwidth utilization of a tunnel. If the the bandwidth is used up, expand the capacity or eliminate the root that transmits a large amount of invalid traffic.
+3. Check whether the remote device is normal. If not (for example, a board fails or the device is reset), rectify the fault.
+4. Check whether the IDs of the tunnel between the two devices are the same.]]></pc_en_network>
+        </prob_cause_en>
+      </prob_causes_en>
+      <prob_causes_cn>
+        <prob_cause_cn>
+          <pc_xh>0</pc_xh>
+          <pc_cause><![CDATA[原因1：OAM本端已经配置了接收使能，对端没有配置发送使能，导致OAM检测功能在3.5个周期内收不到对端的连通性报文。
+原因2：链路中接口被shutdown，导致OAM检测功能在3.5个周期内收不到对端的连通性报文。
+原因3：链路堵塞，转发不通，导致OAM检测功能在3.5个周期内收不到对端的连通性报文。
+原因4：链路劣化丢包情况严重，导致OAM检测功能在3.5个周期内收不到对端的连通性报文。]]></pc_cause>
+          <pc_advise><![CDATA[1. 执行命令display mpls-tp oam meg <meg-name>命令查看源端和宿端的MEG的CC使能配置是否正常。
+  - 如果是，请执行步骤3。
+  - 如果否，请执行步骤2。
+2. 重新配置源端和目的端MEG的CC功能。
+  - 查看是否出现MPLS_LSPM_1.3.6.1.4.1.2011.5.25.121.2.1.19 hwMplsOamLossRecovery的告警。
+    - 如果是，请执行步骤7。
+    - 如果否，请执行步骤3。
+3. 执行命令display interface，查看链路中是否有业务绑定的物理接口处于shutdown状态。
+  - 如果是，请执行步骤4。
+  - 如果否，请执行步骤5。
+4. 使用undo shutdown命令使能物理接口，查看告警是否清除。
+  - 如果是，请执行步骤7。
+  - 如果否，请执行步骤5。
+5. 如果配置没有错误，即为链路故障的情况。则请执行步骤6。
+6. 请收集告警信息和配置信息，并联系技术支持工程师。
+7. 结束。]]></pc_advise>
+          <pc_may_cause><![CDATA[如果出现了该告警说明被检测的MPLS业务路径已经不通，会影响该MPLS正常业务。]]></pc_may_cause>
+          <pc_tigger><![CDATA[响该mpls正常业务。 链路故障。]]></pc_tigger>
+          <pc_network><![CDATA[1）检查物理链路是否正常，更换出故障的器件(比如光纤/单板/光模块等)； 2）检查Tunnel的带宽占用情况，如发现已满，请进行扩容或消除非法发送大数据量的根源； 3）检查对端设备是否有异常，消除对端故障（比如存在单板故障或设备复位等情况）； 4）检查配置两端对应的tunnel的tunnel ID是否一致]]></pc_network>
+        </prob_cause_cn>
+      </prob_causes_cn>
+      <prob_cause_traps></prob_cause_traps>
+      <prob_fix_traps></prob_fix_traps>
+      <carrier_objects>
+        <carrier_obj>
+          <carrier_objname><![CDATA[linkDown]]></carrier_objname>
+          <carrier_objid><![CDATA[3624065]]></carrier_objid>
+          <carrier_objtype><![CDATA[22]]></carrier_objtype>
+          <carrier_fim_id>0x08520003</carrier_fim_id>
+          <carrier_objpara>IfIndex</carrier_objpara>
+          <carrier_objtype_name><![CDATA[interface]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[mplsTunnelDown]]></carrier_objname>
+          <carrier_objid><![CDATA[3624272]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09060004</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[MPLS_TUNNEL_UNKNOWN]]></carrier_objname>
+          <carrier_objid><![CDATA[3624086]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09062053</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[MPLS_TUNNEL_MISMERGE]]></carrier_objname>
+          <carrier_objid><![CDATA[3624019]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09062051</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[MPLS_TUNNEL_MISMATCH]]></carrier_objname>
+          <carrier_objid><![CDATA[3624200]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09062050</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsOamPeriod]]></carrier_objname>
+          <carrier_objid><![CDATA[3624245]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09060015</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsOamAis]]></carrier_objname>
+          <carrier_objid><![CDATA[3623986]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x0906000b</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsOamLck]]></carrier_objname>
+          <carrier_objid><![CDATA[3624158]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09060017</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsOamMeg]]></carrier_objname>
+          <carrier_objid><![CDATA[3624236]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x0906000f</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsOamMep]]></carrier_objname>
+          <carrier_objid><![CDATA[3624074]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x09060011</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[MPLS_TUNNEL_FDI]]></carrier_objname>
+          <carrier_objid><![CDATA[3623950]]></carrier_objid>
+          <carrier_objtype><![CDATA[12]]></carrier_objtype>
+          <carrier_fim_id>0x0906204f</carrier_fim_id>
+          <carrier_objpara>SessionTunnelId;LocalLspId;IngressLsrId;EgressLsrId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[TUNNEL]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsTpOamSectionLocalLock]]></carrier_objname>
+          <carrier_objid><![CDATA[3624260]]></carrier_objid>
+          <carrier_objtype><![CDATA[83]]></carrier_objtype>
+          <carrier_fim_id>0x09c9200d</carrier_fim_id>
+          <carrier_objpara>MegId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+        </carrier_obj>
+        <carrier_obj>
+          <carrier_objname><![CDATA[hwMplsTpOamSectionLossOfConnection]]></carrier_objname>
+          <carrier_objid><![CDATA[3624072]]></carrier_objid>
+          <carrier_objtype><![CDATA[83]]></carrier_objtype>
+          <carrier_fim_id>0x09c90000</carrier_fim_id>
+          <carrier_objpara>MegId</carrier_objpara>
+          <carrier_objtype_name><![CDATA[section_OAM]]></carrier_objtype_name>
+        </carrier_obj>
+      </carrier_objects>
+      <module>SUBSYS_ID_P2PTE</module>
+      <feature>MPLS_LSPM</feature>
+      <fom_mappings/>
+      <alarm_objecttype_name>TUNNEL</alarm_objecttype_name>
+    </fim>
+  </content>
+  <alm_info_version>V800R007_0.1</alm_info_version>
+</doc>
