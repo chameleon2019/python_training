@@ -1,335 +1,463 @@
 from lxml import etree
+import bs4
+from bs4 import BeautifulSoup
 import logging, os
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT, filename=r'D:\Actions\Test_Enviroment\python_Work\ptn_info_tools\alarm_to_omsys\log.log')
+logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT, filename=r'D:\Actions\Test_Enviroment\python_Work\ptn_info_tools\alarm_to_omsys\log.log')
 
 class TopicAlarm:
-    def __init__(self, topic_path, language):
+    def __init__(self, topic_path, language, type):
         self.topic_path = topic_path
         if os.path.exists(self.topic_path):
             self.file_exist = True
         else:
             self.file_exist = False
         self.language = language
-        self.create_topic_alarm()
-    @staticmethod
-    def getText(elem):
-        rc = []
-        for node in elem.itertext():
-            rc.append(node.strip())
-        return ''.join(rc)
+        if type == "xml":
+            self.create_topic_alarm_xml()
+        elif type == "html":
+            self.create_topic_alarm_html()
+
+    def __str__(self):
+        for item in self.__dict__:
+            logging.info(item)
+        # return str(self.__dict__)
+        # new_str = ''
+        # for item in TopicAlarm.attrs:
+        #     logging.info(item)
+
+    def create_topic_alarm_html(self):
+        pass
 
     @staticmethod
-    def get_text_p(ele):
-        ele_children = ele.xpath(".//*")
-        ele_children_ph = ele.xpath(".//ph")
-        if len(ele_children) == len(ele_children_ph):
-            logging.debug("P标记对内都是ph标记对")
-            text = TopicAlarm.getText(ele)
-            return True, text
-        else:
-            error_message = "P标记对内有其他标记对"
-            return False, error_message
-
-
-    @staticmethod
-    def process_p(ele):
-        ele_children = ele.xpath("./*")
-        ele_children_p = ele.xpath("./p")
-        texts = []
-        errors = []
-        if len(ele_children) == len(ele_children_p):
-            logging.debug("都是P标记对"+str(ele))
-            for p in ele_children_p:
-                result, text = TopicAlarm.get_text_p(p)
-                if result:
-                    texts.append(text)
-                else:
-                    errors.append(text +":" + str(ele_children_p.index(p)))
-        else:
-            error_message = "此标记对内不是全是p标记对"
-            errors.append(error_message)
-        if len(errors)>0:
-            return False, "\n".join(errors)
-        else:
-            if len(texts) == 1:
-                return True, texts[0]
-            else:
-                return True, "\n".join(texts)
-
-    def create_topic_alarm(self):
-        topic_etree = etree.parse(self.topic_path)
-        root = topic_etree.getroot()
-        if root.tag != "alarmref":
-            logging.error(self.topic_path+" 不是告警文件")
-            self.is_alarm_topic = False
-        else:
-            self.is_alarm_topic = True
-            # 获取告警title
-            title = topic_etree.xpath("//alarmref/title")
-            if len(title) != 1:
-                logging.error(self.topic_path+"title个数错误")
-            else:
-                self.topic_title = title[0].text
-                logging.debug(self.topic_title)
-
-            # 获取告警文件alarmrefbody
-            alarmrefbody = topic_etree.xpath("//alarmref/alarmrefbody")
-            if len(alarmrefbody) != 1:
-                not_validated_reason = "alarmrefbody个数错误"
-                logging.error(self.topic_path+"alarmrefbody个数错误")
-                self.validated = False
-                self.not_validated_reason = not_validated_reason
-            else:
-                alarmrefbody = alarmrefbody[0]
-
-                # 获取告警解释部分
-                alarmdesc = alarmrefbody.xpath("alarmdesc")
-                if len(alarmdesc) != 1:
-                    logging.error(self.topic_path + "alarmdesc个数错误")
-                else:
-                    alarmdesc = alarmdesc[0]
-                    get_alarmdesc_content_result, alarmdesc_content = self.process_p(alarmdesc)
-                    if get_alarmdesc_content_result:
-                        self.alarmdesc_content = alarmdesc_content
-                        if alarmdesc_content.strip() == "":
-                            logging.error("告警解释为空：" + self.topic_title)
-                    else:
-                        logging.error("告警解释解析失败：" + alarmdesc_content)
-
-                # 获取alarmattrs部分，暂时不做
-                alarmattrs = alarmrefbody.xpath("alarmattrs")
-                if len(alarmattrs) != 1:
-                    logging.error(self.topic_path + "alarmattrs个数错误")
-                else:
-                    alarmattr = alarmattrs[0]
-
-
-
-                impactonsystems = alarmrefbody.xpath("impactonsystem")
-                self.impactonsystem_content = []
-                if len(impactonsystems) != 1:
-                    logging.error(self.topic_path + "impactonsystem个数错误")
-                else:
-                    impactonsystem = impactonsystems[0]
-                    impactonsystem_children = impactonsystem.xpath("./*")
-                    impactonsystem_children_p = impactonsystem.xpath("./p")
-                    impactonsystem_children_ul = impactonsystem.xpath("./ul")
-                    if len(impactonsystem_children) == 0:
-                        pass
-                    else:
-                        have_other_elements = False
-                        for item in impactonsystem_children:
-                            if item.tag not in ['p', 'ul']:
-                                logging.error(self.topic_path + "impactonsystem中存在非p/ul标记对，请检查")
-                                self.impactonsystem_content = ""
-                                have_other_elements = True
-                        if have_other_elements:
-                            pass
+    def get_p_content(element, language, is_cause=False, get_p_content_debug= False):
+        element_contents = element.contents
+        if get_p_content_debug:
+            if len(element_contents) > 1:
+                logging.info("长度" + str(len(element_contents)))
+        element_text = ''
+        multiple = 0
+        for sub_element in element_contents:
+            if sub_element != None:
+                sub_element_tag = sub_element.name
+                if sub_element_tag != None:
+                    if sub_element_tag == 'parmvalue':
+                        if language == "zh":
+                            element_text += '“' + sub_element.string + '”'
                         else:
-                            if len(impactonsystem_children_p) >0 and len(impactonsystem_children_ul)>0:
-                                logging.error(self.topic_path + "impactonsystem中存在p和ul标记对混用，请检查")
-                            else:
-                                if len(impactonsystem_children_p) > 0:
-                                    if len(impactonsystem_children_p) == 1:
-                                        get_impactonsystem_content_result, impactonsystem_content =  self.get_text_p(impactonsystem_children_p[0])
-                                        if get_impactonsystem_content_result:
-                                            # self.impactonsystem_content = impactonsystem_content
-                                            p_attrs = impactonsystem_children_p[0].items()
-                                            for item in p_attrs:
-                                                if item[0] == 'id':
-                                                    # logging.info(item[1])
-                                                    cause_id = item[1][5:]
-                                                    # logging.info(cause_id)
-                                                    self.impactonsystem_content = {
-                                                        'cause_id': cause_id,
-                                                        'impactonsystem_content': impactonsystem_content
-                                                    }
-                                            # (cause_id)
-                                        else:
-                                            logging.error(impactonsystem_content)
-                                    else:
-                                        logging.error(self.topic_path + "impactonsystem中存在p标记对超过两个，请检查")
-                                elif len(impactonsystem_children_ul)>0:
-                                    if len(impactonsystem_children_ul) == 1:
-                                        impactonsystem_cause_id = False
-                                        impactonsystem_ul_cause_id = False
-                                        only_one_cause = False
-                                        lis = impactonsystem_children_ul[0].xpath("./li")
-                                        # logging.info(len(lis))
-                                        ul_attrs = impactonsystem_children_ul[0].items()
-                                        impactonsystem_attrs = impactonsystem.items()
-                                        for item in impactonsystem_attrs:
-                                            if item[0] == 'id':
-                                                cause_id = item[1][5:]
-                                                impactonsystem_cause_id = True
-                                                only_one_cause = True
-                                        if not impactonsystem_cause_id:
-                                            for item in ul_attrs:
-                                                if item[0] == 'id':
-                                                    impactonsystem_ul_cause_id = True
-                                                    cause_id = item[1][5:]
-                                                    only_one_cause = True
-                                                # 后面获取内容都是某个cause的
-                                        impactonsystem_contents = []
-                                        for li in lis:
-                                            get_impactonsystem_content_result, impactonsystem_content = self.get_text_p(li)
-                                            logging.info(impactonsystem_content)
-                                            if not get_impactonsystem_content_result:
-                                                logging.error(impactonsystem_content)
-                                            else:
-                                                if not only_one_cause:
-                                                    li_attrs = li.items()
-                                                    for item in li_attrs:
-                                                        if item[0] == 'id':
-                                                            cause_id = item[1][5:]
-                                                            self.impactonsystem_content.append(
-                                                                {
-                                                                    'cause_id': cause_id,
-                                                                    'impactonsystem_content': impactonsystem_content
-                                                                }
-                                                            )
-                                                        else:
-                                                            logging.error(self.topic_path + "impactonsystem的ul标记对中，有li未标记cause")
-                                                else:
-                                                    impactonsystem_contents.append(impactonsystem_content)
-
-                                        if only_one_cause:
-                                            self.impactonsystem_content = {
-                                                'cause_id': cause_id,
-                                                'impactonsystem_content': '\n'.join(impactonsystem_contents)
-                                            }
-
-
-
-                possiblecausess = alarmrefbody.xpath("possiblecauses")
-                self.possiblecauses_content = []
-                if len(possiblecausess) != 1:
-                    logging.error(self.topic_path + "possiblecauses个数错误")
-                else:
-                    possiblecauses = possiblecausess[0]
-                    possiblecauses_children = possiblecauses.xpath("./*")
-                    possiblecauses_children_p = possiblecauses.xpath("./p")
-                    possiblecauses_children_ul = possiblecauses.xpath("./ul")
-                    if len(possiblecauses_children) == 0:
-                        pass
-                    else:
-                        have_other_elements = False
-                        for item in possiblecauses_children:
-                            if item.tag not in ['p', 'ul']:
-                                logging.error(
-                                    self.topic_path + "possiblecauses中存在非p/ul标记对，请检查")
-                                self.possiblecauses_content = ""
-                                have_other_elements = True
-                        if have_other_elements:
-                            pass
+                            element_text += '"' + sub_element.string + '"'
+                    elif sub_element_tag == 'parmvalue' or sub_element_tag == 'parmname':
+                        if language == "zh":
+                            element_text += '“' + sub_element.string + '”'
                         else:
-                            if len(possiblecauses_children_p) > 0 and len(
-                                    possiblecauses_children_ul) > 0:
-                                logging.error(
-                                    self.topic_path + "possiblecauses中存在p和ul标记对混用，请检查")
-                            else:
-                                if len(possiblecauses_children_p) > 0:
-                                    if len(possiblecauses_children_p) == 1:
-                                        get_possiblecauses_content_result, possiblecauses_content = self.get_text_p(
-                                            possiblecauses_children_p[0])
-                                        if get_possiblecauses_content_result:
-                                            # self.possiblecauses_content = possiblecauses_content
-                                            p_attrs = possiblecauses_children_p[0].items()
-                                            for item in p_attrs:
-                                                if item[0] == 'id':
-                                                    # logging.info(item[1])
-                                                    cause_id = item[1][5:]
-                                                    # logging.info(cause_id)
-                                                    self.possiblecauses_content = {
-                                                        'cause_id': cause_id,
-                                                        'possiblecauses_content': possiblecauses_content
-                                                    }
-                                                    # (cause_id)
-                                        else:
-                                            logging.error(possiblecauses_content)
-                                    else:
-                                        logging.error(
-                                            self.topic_path + "possiblecauses中存在p标记对超过两个，请检查")
-                                elif len(possiblecauses_children_ul) > 0:
-                                    if len(possiblecauses_children_ul) == 1:
-                                        possiblecauses_cause_id = False
-                                        possiblecauses_ul_cause_id = False
-                                        only_one_cause = False
-                                        lis = possiblecauses_children_ul[0].xpath("./li")
-                                        # logging.info(len(lis))
-                                        ul_attrs = possiblecauses_children_ul[0].items()
-                                        possiblecauses_attrs = possiblecauses.items()
-                                        for item in possiblecauses_attrs:
-                                            if item[0] == 'id':
-                                                cause_id = item[1][5:]
-                                                possiblecauses_cause_id = True
-                                                only_one_cause = True
-                                        if not possiblecauses_cause_id:
-                                            for item in ul_attrs:
-                                                if item[0] == 'id':
-                                                    possiblecauses_ul_cause_id = True
-                                                    cause_id = item[1][5:]
-                                                    only_one_cause = True
-                                                    # 后面获取内容都是某个cause的
-                                        possiblecauses_contents = []
-                                        for li in lis:
-                                            get_possiblecauses_content_result, possiblecauses_content = self.get_text_p(
-                                                li)
-                                            logging.info(possiblecauses_content)
-                                            if not get_possiblecauses_content_result:
-                                                logging.error(possiblecauses_content)
-                                            else:
-                                                if not only_one_cause:
-                                                    li_attrs = li.items()
-                                                    for item in li_attrs:
-                                                        if item[0] == 'id':
-                                                            cause_id = item[1][5:]
-                                                            self.possiblecauses_content.append(
-                                                                {
-                                                                    'cause_id': cause_id,
-                                                                    'possiblecauses_content': possiblecauses_content
-                                                                }
-                                                            )
-                                                        else:
-                                                            logging.error(
-                                                                self.topic_path + "possiblecauses的ul标记对中，有li未标记cause")
-                                                else:
-                                                    possiblecauses_contents.append(
-                                                        possiblecauses_content)
-
-                                        if only_one_cause:
-                                            self.possiblecauses_content = {
-                                                'cause_id': cause_id,
-                                                'possiblecauses_content': '\n'.join(
-                                                    possiblecauses_contents)
-                                            }
-
-                                        # get_possiblecauses_content_result, possiblecauses_content =  self.get_text_ul(possiblecauses_children_ul)
-                                        # if get_possiblecauses_content_result:
-                                        #     self.possiblecauses_content = possiblecauses_content
-                                        # else:
-                                        #     logging.error(possiblecauses_content)
-                                    else:
-                                        logging.error(self.topic_path + "possiblecauses中存在ul标记对超过两个，请检查")
-
-
-
-                possiblecauses = alarmrefbody.xpath("possiblecauses")
-                if len(possiblecauses) != 1:
-                    logging.error(self.topic_path+"possiblecause个数错误")
-                else:
-                    possiblecause = possiblecauses[0]
-
-
-                alarmhandling = alarmrefbody.xpath("alarmhandling")
-                alarmhandling_unordered = alarmrefbody.xpath("alarmhandling-unordered")
-                if (len(alarmhandling) + len(alarmhandling_unordered)) != 1:
-                    logging.error(self.topic_path+"alarmhandling个数错误")
-                else:
-                    if len(alarmhandling) == 1:
-                        real_alarmhandling = alarmhandling[0]
+                            element_text += '"' + sub_element.string + '"'
+                    elif sub_element_tag == 'ph':
+                        element_text += sub_element.string
+                    elif sub_element_tag == 'ul':
+                        if multiple > 0:
+                            element_text += '\n' + TopicAlarm.get_ul_content(sub_element, language)
+                        else:
+                            element_text += TopicAlarm.get_ul_content(sub_element, language)
+                        multiple += 1
                     else:
-                        real_alarmhandling = alarmhandling_unordered[0]
-                    real_alarmhandling_steps = real_alarmhandling.xpath(".//step")
+                        logging.error("not parmvalue")
+                        logging.error(sub_element)
+                else:
+                    element_text += sub_element
+        if is_cause:
+            if language == "zh":
+                if element_text.startswith("原因"):
+                    co_index =element_text.find("：")
+                    element_text = element_text[co_index+1:]
+            elif language == 'en':
+                if element_text.startswith("Cause"):
+                    co_index = element_text.find(":")
+                    element_text = element_text[co_index+1:]
+        return element_text
+        # logging.info("element_text: " + element_text)
 
+    @staticmethod
+    def get_li_content(element, language, is_cause=False, get_li_content_debug=False):
+        element_contents = element.contents
+        element_text = ''
+        multiple = 0
+        for sub_element in element_contents:
+            sub_element_tag = sub_element.name
+
+            if sub_element_tag != None:
+                if sub_element_tag == 'p':
+                    multiple += 1
+                    element_text += TopicAlarm.get_p_content(sub_element, language)
+                elif sub_element_tag == 'parmvalue' or sub_element_tag == 'parmname':
+                    if language == "zh":
+                        element_text += '“' + sub_element.string + '”'
+                    else:
+                        element_text += '"' + sub_element.string + '"'
+                elif sub_element_tag == 'ph':
+                    element_text += sub_element.string
+                elif sub_element_tag == 'ul':
+                    if multiple>0:
+                        element_text += '\n'+TopicAlarm.get_ul_content(sub_element, language)
+                    else:
+                        element_text += TopicAlarm.get_ul_content(sub_element, language)
+                    multiple += 1
+                else:
+                    logging.warning(sub_element_tag)
+                    logging.error(sub_element)
+            else:
+                multiple += 1
+                element_text += sub_element
+
+        if is_cause:
+            if language == "zh":
+                if element_text.startswith("原因"):
+                    co_index =element_text.find("：")
+                    element_text = element_text[co_index+1:]
+            elif language == 'en':
+                if element_text.startswith("Cause"):
+                    co_index = element_text.find(":")
+                    element_text = element_text[co_index+1:]
+        return element_text
+
+    @staticmethod
+    def get_ul_content(element, language, get_ul_content_debug= False):
+        element_contents = element.contents
+        ul_contents = []
+        if get_ul_content_debug:
+            pass
+
+        for sub_element in element_contents:
+            # logging.info(sub_element)
+            sub_element_tag = sub_element.name
+            if sub_element_tag != None:
+                if sub_element_tag != "li":
+                    logging.warning(sub_element)
+                else:
+                    li_content = TopicAlarm.get_li_content(sub_element, language)
+                    ul_contents.append(' - ' + li_content)
+            else:
+                try:
+                    if sub_element.strip() == "":
+                        pass
+                except:
+                    logging.warning(sub_element)
+        if len(ul_contents) == 1:
+            return ul_contents[0]
+        elif len(ul_contents) == 0:
+            return ""
+        else:
+            return '\n'.join(ul_contents)
+
+    @staticmethod
+    def get_step_content(element, language, get_step_content_debug = False):
+        if element.name != 'step':
+            return False
+        element_contents = element.contents
+        step_contents = []
+        for item in element_contents:
+            item_tag = item.name
+            if item_tag == None:
+                pass
+            elif item_tag == 'cmd':
+                cause = TopicAlarm.get_p_content(item, language)
+                # logging.warning(cause)
+            elif item_tag == 'substeps':
+                for substep in item.contents:
+                    substep_tag = substep.name
+                    if substep_tag == None:
+                        pass
+                    elif substep_tag == 'substep':
+                        substep_content = TopicAlarm.get_substep_content(substep, language)
+                        if substep_content.strip() != '':
+                            step_contents.append(substep_content)
+                        # logging.error(substep_content)
+                    else:
+                        # logging.warning(substep)
+                        pass
+                # logging.warning(item)
+                pass
+            elif item_tag == 'info':
+                logging.error("step中使用了info标记对，请修改")
+            else:
+                # logging.error(item)
+                pass
+        return cause, '\n'.join(step_contents)
+
+    @staticmethod
+    def get_substep_content(element,language, get_substep_content_debug = False):
+        if element.name != 'substep':
+            return False
+        element_contents = element.contents
+        substep_contents = []
+        for item in element_contents:
+            item_tag = item.name
+            if item_tag == None:
+                pass
+            if item_tag == 'cmd':
+                substep_content = TopicAlarm.get_p_content(item, language)
+                substep_contents.append(substep_content)
+            else:
+                pass
+        return '\n'.join(substep_contents)
+
+    # 获取告警解释
+    def get_alarmdesc_content_xml(self):
+        # logging.info(topic_xml)
+        alarmdesc = self.topic_xml.find("alarmdesc")
+        if alarmdesc != None:
+            self.have_alarmdesc_content = True
+            alarmdesc_elements = alarmdesc.contents
+            alarmdesc_contents = []
+            for element in alarmdesc_elements:
+                # logging.info(element)
+                if element.name != 'p':
+                    if element.strip() != "":
+                        logging.error(element)
+                        logging.error("存在非P标记对")
+                else:
+                    element_content = self.get_p_content(element, self.language).strip()
+                    if element_content != "":
+                        alarmdesc_contents.append(element_content)
+            if len(alarmdesc_contents) < 1:
+                self.alarmdesc_content = ""
+            elif len(alarmdesc_contents) == 1:
+                self.alarmdesc_content = alarmdesc_contents[0]
+            else:
+                self.alarmdesc_content = "\n".join(alarmdesc_contents)
+        else:
+            self.have_alarmdesc_content = False
+
+    # 获取可能的原因
+    def get_possiblecauses_content_xml(self):
+        self.cause_ids = []
+        self.possiblecauses_content = []
+        possiblecauses = self.topic_xml.find("possiblecauses")
+        try:
+            one_id = possiblecauses.attrs['id']
+            if one_id != None:
+                if one_id.startswith('cause'):
+                    cause_id = one_id[5:]
+                    self.cause_ids.append(cause_id)
+        except:
+
+            if possiblecauses != None:
+                self.have_alarmposs_content = True
+                self.have_alarmposs_cause_id = False
+                possible_causes = possiblecauses.find_all(id=True)
+                if len(possible_causes) > 0:
+                    for possible_cause in possible_causes:
+                        id = possible_cause.attrs['id']
+                        if id != None:
+                            if id.startswith('cause'):
+                                cause_id = id[5:]
+                                self.cause_ids.append(cause_id)
+                                possible_cause_tag = possible_cause.name
+                                if possible_cause_tag == 'p':
+                                    cause_content = self.get_p_content(possible_cause, self.language, is_cause=True)
+                                    # logging.info(cause_content)
+                                elif possible_cause_tag == 'ul':
+                                    cause_content = self.get_ul_content(possible_cause, self.language)
+                                    # logging.info(cause_content)
+                                elif possible_cause_tag == 'li':
+                                    cause_content = self.get_li_content(possible_cause, self.language, is_cause=True)
+                                    # logging.info(cause_content)
+                                else:
+                                    logging.error("标签：" + possible_cause.name)
+                                    cause_content = 'empty possible_cause'
+                                self.possiblecauses_content.append(
+                                    {
+                                        'cause_id': cause_id,
+                                        'cause_content': cause_content,
+                                    }
+                                )
+            else:
+                self.have_alarmposs_content = False
+        if len(self.cause_ids)<1:
+            self.validated_topic = False
+            self.not_validated_reason = "不含cause id"
+
+    # 获取对系统的影响
+    def get_impactonsystem_content_xml(self):
+        # impactonsystem_cause_ids = []
+        impactonsystem = self.topic_xml.find("impactonsystem")
+        if impactonsystem != None:
+            self.have_impactonsystem_content = True
+            self.impactonsystem_contents = []
+            impactonsystem_causes = impactonsystem.find_all(id=True)
+            if len(impactonsystem_causes) > 0:
+                for impactonsystem_cause in impactonsystem_causes:
+                    id = impactonsystem_cause.attrs['id']
+                    if id != None:
+                        if id.startswith('cause'):
+                            cause_id = id[5:]
+                            # self.cause_ids.append(cause_id)
+                            # logging.info(cause_id)
+                            # impactonsystem_cause_ids.append(cause_id)
+                            impactonsystem_cause_tag = impactonsystem_cause.name
+                            if impactonsystem_cause_tag == 'p':
+                                cause_content = self.get_p_content(impactonsystem_cause, self.language, is_cause=True)
+                                # logging.info(cause_content)
+                            elif impactonsystem_cause_tag == 'ul':
+                                cause_content = self.get_ul_content(impactonsystem_cause, self.language)
+                                # logging.info(cause_content)
+                            elif impactonsystem_cause_tag == 'li':
+                                cause_content = self.get_li_content(impactonsystem_cause, self.language, is_cause=True)
+                                # logging.info(cause_content)
+                            else:
+                                logging.error("标签：" + impactonsystem_cause.name)
+                            self.impactonsystem_contents.append(
+                                {
+                                    'cause_id': cause_id,
+                                    'cause_content': cause_content,
+                                }
+                            )
+            else:
+                impactonsystem_contents = impactonsystem.contents
+                multiple = 0
+                element_text = ''
+                for element in impactonsystem_contents:
+                    element_tag = element.name
+                    if element_tag == None:
+                        try:
+                            if element.strip() == "":
+                                pass
+                        except:
+                            logging.warning(element)
+                    else:
+
+                        if element_tag == 'p':
+                            element_text += TopicAlarm.get_p_content(element, self.language)
+                            multiple +=1
+                        elif element_tag == 'ul':
+                            element_text += TopicAlarm.get_ul_content(element, self.language)
+                            multiple += 1
+                        else:
+                            logging.warning(element)
+                for item in self.cause_ids:
+                    cause_id = item
+                    self.impactonsystem_contents.append({
+                        'cause_id': cause_id,
+                        'cause_content': element_text,
+                    })
+        else:
+            logging.error(impactonsystem)
+            self.have_impactonsystem_content = False
+
+    # 获取操作步骤
+    def get_alarmhandling_content_xml(self):
+        alarmhandling_unordered = self.topic_xml.find_all('alarmhandling-unordered')
+        alarmhandling_ordered = self.topic_xml.find_all('alarmhandling')
+        # 如果是ordered
+        if len(alarmhandling_unordered) != 1:
+            if len(alarmhandling_ordered) != 1:
+                self.successful_parse = False
+                self.not_successful_parse_reason = 'alarmhandling和alarmhandling-unordered数量错误'
+            else:
+                alarmhandlings = alarmhandling_ordered
+                self.alarmhandling_type = 'alarmhandling_ordered'
+        else:
+            if len(alarmhandling_ordered) == 1:
+                self.successful_parse = False
+                self.not_successful_parse_reason = 'alarmhandling和alarmhandling-unordered数量错误'
+            else:
+                alarmhandlings = alarmhandling_unordered
+                self.alarmhandling_type = 'alarmhandling_unordered'
+        if self.successful_parse:
+            if len(alarmhandlings)>1:
+                self.successful_parse = False
+                self.not_successful_parse_reason = 'alarmhandling和alarmhandling-unordered数量错误'
+            else:
+                self.alarmhandling = alarmhandlings[0]
+
+        if self.successful_parse:
+            overall_handling = False
+            self.have_alarmhandling_content = True
+            self.alarmhandling_contents = []
+            try:
+                alarmhandling_id = self.alarmhandling.attrs['id']
+                if alarmhandling_id != None:
+                    if alarmhandling_id.startswith('cause'):
+                        cause_id = alarmhandling_id[5:]
+                        overall_handling = True
+                        all_step_contents = []
+                        for step in self.alarmhandling.contents:
+                            if step != '\n':
+                                cause, step_content = self.get_step_content(step, self.language)
+                                all_step_contents.append(cause+'\n'+ step_content)
+                        self.alarmhandling_contents.append({
+                            'cause_id': cause_id,
+                            'alarmhandling': '\n'.join(all_step_contents)
+                        })
+            except:
+                alarmhandling_causes = self.alarmhandling.find_all(id=True)
+                if len(alarmhandling_causes) > 0:
+                    for alarmhandling_cause in alarmhandling_causes:
+                        id = alarmhandling_cause.attrs['id']
+                        if id != None:
+                            if id.startswith('cause'):
+                                cause_id = id[5:]
+                                alarmhandling_cause_tag = alarmhandling_cause.name
+                                if alarmhandling_cause_tag != 'step':
+                                    logging.warning(alarmhandling_cause_tag)
+                                else:
+                                    cause, step_content = self.get_step_content(alarmhandling_cause, self.language)
+                                    # logging.warning(cause+step_content)
+                                self.alarmhandling_contents.append({
+                                    'cause_id': cause_id,
+                                    'alarmhandling': step_content
+                                })
+                        else:
+                            pass
+
+                else:
+                    pass
+
+
+    # 获取参数列表
+    def get_parameter_content_xml(self):
+        alarmparameters = self.topic_xml.find("alarmparameters")
+        if alarmparameters != None:
+            self.have_alarmparameters_content = True
+            self.alarmparameters_contents = []
+            all_alarmparameter = alarmparameters.find_all('alarmparameter')
+            # logging.warning(len(all_alarmparameter))
+            if len(all_alarmparameter) >0:
+                for alarmparameter in all_alarmparameter:
+                    alarmparameterdesc = alarmparameter.find('alarmparameterdesc')
+                    alarmparameterdesc_content = ''
+                    for item in alarmparameterdesc.contents:
+                        item_content = self.get_p_content(item, self.language)
+                        alarmparameterdesc_content += item_content
+                    # logging.info(alarmparameterdesc_content)
+                    self.alarmparameters_contents.append(alarmparameterdesc_content)
+                    # alarmparameterdesc_content = self.get_p_content(alarmparameterdesc, self.language)
+                    # logging.info(alarmparameterdesc_content)
+            else:
+                if self.language == "zh":
+                    self.alarmparameters_contents.append("无。")
+                else:
+                    self.alarmparameters_contents.append("None.")
+        else:
+            logging.error(alarmparameters)
+            self.have_alarmparameters_content = False
+
+    def create_topic_alarm_xml(self):
+        self.topic_xml = BeautifulSoup(open(self.topic_path,'rb'), "xml")
+        self.validated_topic = True
+        self.successful_parse = True
+        if self.topic_xml.find("alarmrefbody") == None:
+            self.validated_topic = False
+            self.not_validated_reason = '非告警topic'
+        if self.validated_topic:
+            self.get_alarmdesc_content_xml()
+            self.get_possiblecauses_content_xml()
+            self.get_impactonsystem_content_xml()
+            if len(self.impactonsystem_contents) <1:
+                self.successful_parse = False
+                self.not_successful_parse_reason = '未获取到对系统的影响'
+            elif len(self.impactonsystem_contents) != len(self.cause_ids):
+                self.successful_parse = False
+                self.not_successful_parse_reason = '对系统的影响中CauseID数量和告警原因的CauseID数量不一致'
+            else:
+                self.get_alarmhandling_content_xml()
+                self.get_parameter_content_xml()
